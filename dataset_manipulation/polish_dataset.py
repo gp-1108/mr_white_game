@@ -104,7 +104,7 @@ def main(file_name: str):
         # If the line is empty, it means we reached the end of a paragraph.
         # We can now write the whole paragraph to the output file.
         count += 1
-        if count % 10000 == 0:
+        if count % 100000 == 0:
           print('Lines read: ' + str(count))
 
         if line == '\n' and len(whole_text) > 0:
@@ -116,10 +116,10 @@ def main(file_name: str):
         line = polish_line(line)
         whole_text += line
 
-        if count >= 1E3: # Stopping at 1M lines for testing purposes
-          output_file.write(whole_text + '\n')
-          whole_text = ''
-          break
+        # if count >= 1E3: # Stopping at 1M lines for testing purposes
+        #   output_file.write(whole_text + '\n')
+        #   whole_text = ''
+        #   break
 
         for word in line.split():
           occurrences.insert(word)
