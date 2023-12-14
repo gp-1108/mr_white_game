@@ -1,12 +1,14 @@
 import torch.nn as nn
 import torch.nn.functional as F
+import os
 
 class CBOW(nn.Module):
-  def __init__(self, vocab_size, embedding_dim, context_size):
+  def __init__(self, vocab_size, embedding_dim, context_size, gpu_id=0):
     super(CBOW, self).__init__()
     self.embeddings = nn.Embedding(vocab_size, embedding_dim)
     self.linear1 = nn.Linear(2 * context_size * embedding_dim, 128)
     self.linear2 = nn.Linear(128, vocab_size)
+    self.gpu_id = gpu_id
   
   def forward(self, contexts):
     embeds = self.embeddings(contexts).view((1, -1))
