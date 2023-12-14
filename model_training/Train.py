@@ -57,7 +57,7 @@ def train_multi_gpu(gpu_id: int,
   # Setting up the DistributedDataParallel model
   model = model.to(gpu_id)
   model = DDP(model, device_ids=[gpu_id])
-  train_loader.set_epoch(epoch)
+  train_loader.sampler.set_epoch(epoch)
 
   model.train()
   train_loss = 0
