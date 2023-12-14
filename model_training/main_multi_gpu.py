@@ -96,6 +96,7 @@ if __name__ == '__main__':
   print(main_args)
 
   world_size = torch.cuda.device_count()
+  print('Number of GPUs: {}'.format(world_size))
   mp.spawn(main,
            args=(world_size, *main_args),
            nprocs=world_size)
