@@ -25,6 +25,10 @@ class CBOW(nn.Module):
     - file_path (str): The file path where the embeddings will be saved.
     - id2word (dict): A dictionary mapping word indices to their corresponding words.
     """
+    # Remove old embeddings if already present
+    if os.path.exists(file_path):
+      os.remove(file_path)
+
     embeddings = self.embeddings.weight.data.cpu().numpy()
     with open(file_path, 'w', encoding='utf-8') as f:
       for idx, word in id2word.items():
