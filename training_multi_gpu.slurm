@@ -1,15 +1,15 @@
 #!/bin/bash
 
-#SBATCH --job-name emb_train
+#SBATCH --job-name emb_train_multi_gpu
 #SBATCH --error emb_train_error_%j.txt
 #SBATCH --output emb_train_output_%j.txt
 #SBATCH --mail-user pietro.girotto@studenti.unipd.it
 #SBATCH --mail-type ALL
-#SBATCH --time 05-00
+#SBATCH --time 05-00:00:00
 #SBATCH --ntasks 1
 #SBATCH --partition allgroups
-#SBATCH --mem 30G
-#SBATCH --gres=gpu:rtx
+#SBATCH --mem 50G
+#SBATCH --gres=gpu:rtx:2
 
 
 # Setting up vars
@@ -46,4 +46,4 @@ save_every=2
 
 # Starting training
 cd $work_dir
-srun singularity exec --bind /ext:/ext --nv /nfsd/opt/sif-images/tensorflow_latest-gpu.sif python3 model_training/main.py -d $dataset_path -c $context_size -e $embedding_dim -ep $epochs -b $batch_size -s $save_every
+srun singularity exec --bind /ext:/ext --nv /nfsd/opt/sif-images/tensorflow_latest-gpu.sif python3 model_training/main_multi_gpu.py -d $dataset_path -c $context_size -e $embedding_dim -ep $epochs -b $batch_size -s $save_every
