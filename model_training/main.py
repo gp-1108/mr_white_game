@@ -3,7 +3,7 @@ from CBOW import CBOW
 from Train import train
 from torch.utils.data import DataLoader
 import torch
-import sys
+import argparse
 
 def collate_func(batch):
   contexts = []
@@ -15,17 +15,13 @@ def collate_func(batch):
 
 
 def main(
-    dataset_path='dataset_manipulation/it_polished.txt',
-    context_size=2,
-    embedding_dim=300,
-    epochs=10,
-    batch_size=32,
+    dataset_path: str,
+    context_size: int,
+    embedding_dim: int,
+    epochs: int,
+    batch_size: int,
+    save_every: int
 ):
-  # Parsing int arguments
-  context_size = int(context_size)
-  embedding_dim = int(embedding_dim)
-  epochs = int(epochs)
-  batch_size = int(batch_size)
 
   # Creating the dataset
   print('Creating the dataset...')
@@ -54,7 +50,14 @@ def main(
   model.to(device)
   for epoch in range(epochs):
     train(
-      model, dataloader, optimizer, criterion, epoch, device)
+      model,
+      dataloader,
+      optimizer,
+      criterion,
+      epoch,
+      device,
+      save_every,
+      dataset.idx_to_word)
   
   # Saving the model
   print('Saving the model...')
@@ -63,5 +66,22 @@ def main(
   
 
 if __name__ == '__main__':
-  args = sys.argv[1:]
-  main(*args)
+  parser = argparse.ArgumentParser("Distributed Data Parallel Training")
+  parser.add_argument('-d', '--dataset_path', type=str, default='dataset_manipulation/it_polished.txt')
+  parser.add_argument('-c', '--context_size', type=int, default=2)
+  parser.add_argument('-e', '--embedding_dim', type=int, default=300)
+  parser.add_argument('-ep', '--epochs', type=int, default=10)
+  parser.add_argument('-b', '--batch_size', type=int, default=32)
+  parser.add_argument('-s', '--save_every', type=int, default=5)
+
+  main_args = (
+    parser.parse_args().dataset_path,
+    parser.parse_args().context_size,
+    parser.parse_args().embedding_dim,
+    parser.parse_args().epochs,
+    parser.parse_args().batch_size,
+    parser.parse_args().save_every,
+  )
+
+  print(main_args)
+  main(*main_args)
