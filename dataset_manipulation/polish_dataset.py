@@ -129,17 +129,21 @@ def main(file_name: str):
   
   # Now we have a Trie with all the words and their occurrences.
   # We can now remove the words with less than 5 occurrences.
+  count = 0
   with open(file_name[:-4] + '_polished_tmp' + file_name[-4:], 'r') as file:
     with open(file_name[:-4] + '_polished' + file_name[-4:], 'w') as output_file:
       for line in file:
+        count += 1
+        if count % 100000 == 0:
+          print('Lines written: ' + str(count))
         new_line = ''
         for word in line.split():
-          if occurrences.search(word) >= 3:
+          if occurrences.search(word) >= 5:
             new_line += word + ' '
         output_file.write(new_line[:-1] + '\n')
   
   # Removing the temporary file
-  # os.remove(file_name[:-4] + '_polished_tmp' + file_name[-4:])
+  os.remove(file_name[:-4] + '_polished_tmp' + file_name[-4:])
 
 
 if __name__ == '__main__':
