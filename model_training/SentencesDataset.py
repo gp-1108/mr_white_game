@@ -1,8 +1,10 @@
+import os
 import torch
 from torch.utils.data import Dataset
 
 class SentencesDataset(Dataset):
   def __init__(self, txt_path, context_size):
+    print("Current working directory:", os.getcwd())
     self._load_data(txt_path)
     self.context_size = context_size
 
@@ -32,7 +34,7 @@ class SentencesDataset(Dataset):
   def _load_data(self, txt_path):
     with open(txt_path, 'r') as f:
       self.sentences = f.read().splitlines()
-    
+
     self.sentences = [s.split() for s in self.sentences]
 
     self.word_to_idx = {}
@@ -45,7 +47,7 @@ class SentencesDataset(Dataset):
           self.word_to_idx[word] = idx
           self.idx_to_word[idx] = word
           idx += 1
-  
+
   def from_idx_to_words(self, idxs: list):
     words = [self.idx_to_word[idx.item()] for idx in idxs]
     return words

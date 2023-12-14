@@ -70,8 +70,7 @@ def main(rank: int,
   for epoch in range(epochs):
     train_multi_gpu(
       rank,
-      model, dataloader, optimizer, criterion, 100, epoch, dataset.idx_to_word,
-      save_every
+      model, dataloader, optimizer, criterion, save_every, epoch, dataset.idx_to_word,
     )
 
 
@@ -100,4 +99,3 @@ if __name__ == '__main__':
   mp.spawn(main,
            args=(world_size, *main_args),
            nprocs=world_size)
-  cleanup()
