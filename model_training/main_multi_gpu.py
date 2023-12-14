@@ -37,7 +37,8 @@ def main(rank: int,
          context_size=2,
          embedding_dim=300,
          epochs=10,
-         batch_size=32):
+         batch_size=32,
+         save_every=5):
 
   ddp_setup(rank, world_size)
 
@@ -69,7 +70,8 @@ def main(rank: int,
   for epoch in range(epochs):
     train_multi_gpu(
       rank,
-      model, dataloader, optimizer, criterion, 100, epoch, dataset.idx_to_word
+      model, dataloader, optimizer, criterion, 100, epoch, dataset.idx_to_word,
+      save_every
     )
 
 
@@ -80,6 +82,7 @@ if __name__ == '__main__':
   parser.add_argument('-e', '--embedding_dim', type=int, default=300)
   parser.add_argument('-ep', '--epochs', type=int, default=10)
   parser.add_argument('-b', '--batch_size', type=int, default=32)
+  parser.add_argument('-s', '--save_every', type=int, default=5)
 
   main_args = (
     parser.parse_args().dataset_path,
@@ -87,6 +90,7 @@ if __name__ == '__main__':
     parser.parse_args().embedding_dim,
     parser.parse_args().epochs,
     parser.parse_args().batch_size,
+    parser.parse_args().save_every,
   )
 
   print(main_args)
